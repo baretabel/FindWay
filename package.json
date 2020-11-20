@@ -14,10 +14,12 @@
     "nodemon": "^2.0.6"
   },
   "dependencies": {
-    "sequelize": "^6.3.5",
-    "sequelize-cli": "^6.2.0",
+    "@spatial/intersect": "^1.0.5",
     "ejs": "~2.6.1",
     "express": "~4.16.1",
-    "express-validator": "^6.6.1"
+    "express-validator": "^6.6.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.3.5",
+    "sequelize-cli": "^6.2.0"
   }
 }

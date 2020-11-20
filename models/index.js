@@ -34,4 +34,12 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+db.adresse = require("./adresse.js")(sequelize, Sequelize);
+db.rue = require("./rue.js")(sequelize, Sequelize);
+db.segment = require("./segement.js")(sequelize, Sequelize);
+db.sens = require("./sens.js")(sequelize, Sequelize);
+
+db.adresse.belongsTo(db.rue);
+db.segment.belongsTo(db.rue);
+
 module.exports = db;
