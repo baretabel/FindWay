@@ -1938,34 +1938,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      drawer: true,
-      items: [{
-        title: 'Home',
-        icon: 'mdi-home-city'
-      }, {
-        title: 'My Account',
-        icon: 'mdi-account'
-      }, {
-        title: 'Users',
-        icon: 'mdi-account-group-outline'
-      }],
-      mini: true
+      drawer: false,
+      model: null,
+      states: ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'District of Columbia', 'Federated States of Micronesia', 'Florida', 'Georgia', 'Guam', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Marshall Islands', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Northern Mariana Islands', 'Ohio', 'Oklahoma', 'Oregon', 'Palau', 'Pennsylvania', 'Puerto Rico', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virgin Island', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']
     };
   }
 });
@@ -1981,9 +1959,11 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_drawer_SideBar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/drawer/SideBar */ "./resources/js/app/components/drawer/SideBar.vue");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_drawer_SideBar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/drawer/SideBar */ "./resources/js/app/components/drawer/SideBar.vue");
+//
+//
 //
 //
 //
@@ -1996,21 +1976,42 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    SideBar: _components_drawer_SideBar__WEBPACK_IMPORTED_MODULE_0__["default"]
+    SideBar: _components_drawer_SideBar__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      drawer: false
+    };
   },
   mounted: function mounted() {
-    var mymap = leaflet__WEBPACK_IMPORTED_MODULE_1___default.a.map(this.$refs['mapElement']).setView([-21.253359, 55.431355], 13);
-    leaflet__WEBPACK_IMPORTED_MODULE_1___default.a.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoieW91diIsImEiOiJja2hlaHp6YnkwOHRqMzFwNWlmdmhtN3h4In0.e3EQyB9RFf547diSz_Xt0Q', {
+    var mymap = leaflet__WEBPACK_IMPORTED_MODULE_0___default.a.map(this.$refs['mapElement']).setView([-20.880991, 55.449446], 13);
+    leaflet__WEBPACK_IMPORTED_MODULE_0___default.a.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoieW91diIsImEiOiJja2hlaHp6YnkwOHRqMzFwNWlmdmhtN3h4In0.e3EQyB9RFf547diSz_Xt0Q', {
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery :copyright: <a href="https://www.mapbox.com/">Mapbox</a>',
       maxZoom: 18,
       id: 'mapbox/streets-v11',
       tileSize: 512,
       zoomOffset: -1,
       accessToken: 'your.mapbox.access.token'
-    }).addTo(mymap);
-    var marker = leaflet__WEBPACK_IMPORTED_MODULE_1___default.a.marker([-21.253359, 55.431355]).addTo(mymap);
+    }).addTo(mymap); // Options for the marker
+
+    var markerOptions = {
+      title: "MyLocation",
+      clickable: true,
+      draggable: true
+    };
+    var marker = leaflet__WEBPACK_IMPORTED_MODULE_0___default.a.marker([-20.880991, 55.449446], markerOptions).addTo(mymap);
+    marker.draggable;
     marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
-    var addressSearchResults = new leaflet__WEBPACK_IMPORTED_MODULE_1___default.a.LayerGroup().addTo(mymap);
+    var addressSearchResults = new leaflet__WEBPACK_IMPORTED_MODULE_0___default.a.LayerGroup().addTo(mymap); // On click show popup
+
+    var popup = leaflet__WEBPACK_IMPORTED_MODULE_0___default.a.popup();
+
+    function onMapClick(e) {
+      var otherMarker = leaflet__WEBPACK_IMPORTED_MODULE_0___default.a.marker([e.latlng.lat, e.latlng.lng], markerOptions).addTo(mymap);
+    } // marker.on('click', removeMarker);
+
+
+    mymap.on('click', onMapClick);
   }
 });
 
@@ -34355,17 +34356,22 @@ var render = function() {
     "nav",
     [
       _c(
+        "v-btn",
+        {
+          attrs: { elevation: "3", id: "btn-sideBar" },
+          on: {
+            click: function($event) {
+              _vm.drawer = !_vm.drawer
+            }
+          }
+        },
+        [_vm._v("button")]
+      ),
+      _vm._v(" "),
+      _c(
         "v-navigation-drawer",
         {
-          attrs: { "mini-variant": _vm.mini, permanent: "" },
-          on: {
-            "update:miniVariant": function($event) {
-              _vm.mini = $event
-            },
-            "update:mini-variant": function($event) {
-              _vm.mini = $event
-            }
-          },
+          attrs: { absolute: "", temporary: "", id: "sideBar", width: 450 },
           model: {
             value: _vm.drawer,
             callback: function($$v) {
@@ -34376,70 +34382,98 @@ var render = function() {
         },
         [
           _c(
-            "v-list-item",
-            { staticClass: "px-2" },
+            "div",
+            {
+              staticClass:
+                "sideBar-items d-flex flex-column py-14 align-content-space-around justify-center"
+            },
             [
               _c(
-                "v-list-item-avatar",
+                "div",
+                { staticClass: "d-flex flex-row align-center justify-center" },
                 [
-                  _c("v-img", {
+                  _c("v-btn", [_vm._v("1")]),
+                  _vm._v(" "),
+                  _c("v-btn", [_vm._v("2")]),
+                  _vm._v(" "),
+                  _c("v-btn", [_vm._v("3")])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                [
+                  _c("v-autocomplete", {
                     attrs: {
-                      src: "https://randomuser.me/api/portraits/men/85.jpg"
+                      items: _vm.states,
+                      "persistent-hint": "",
+                      "prepend-icon": "mdi-city"
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "append-outer",
+                        fn: function() {
+                          return [
+                            _c("v-slide-x-reverse-transition", {
+                              attrs: { mode: "out-in" }
+                            })
+                          ]
+                        },
+                        proxy: true
+                      }
+                    ]),
+                    model: {
+                      value: _vm.model,
+                      callback: function($$v) {
+                        _vm.model = $$v
+                      },
+                      expression: "model"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("v-autocomplete", {
+                    attrs: {
+                      items: _vm.states,
+                      "persistent-hint": "",
+                      "prepend-icon": "mdi-city"
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "append-outer",
+                        fn: function() {
+                          return [
+                            _c("v-slide-x-reverse-transition", {
+                              attrs: { mode: "out-in" }
+                            })
+                          ]
+                        },
+                        proxy: true
+                      }
+                    ]),
+                    model: {
+                      value: _vm.model,
+                      callback: function($$v) {
+                        _vm.model = $$v
+                      },
+                      expression: "model"
                     }
                   })
                 ],
                 1
               ),
               _vm._v(" "),
-              _c("v-list-item-title", [_vm._v("John Leider")]),
+              _c("p", [
+                _vm._v(
+                  "Vous pouvez cliquez sur la carte pour adapter votre parcour"
+                )
+              ]),
               _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  attrs: { icon: "" },
-                  on: {
-                    click: function($event) {
-                      $event.stopPropagation()
-                      _vm.mini = !_vm.mini
-                    }
-                  }
-                },
-                [_c("v-icon", [_vm._v("mdi-chevron-left")])],
-                1
-              )
+              _c("v-btn", [_vm._v("Commencer le parcours >")])
             ],
             1
-          ),
-          _vm._v(" "),
-          _c("v-divider"),
-          _vm._v(" "),
-          _c(
-            "v-list",
-            { attrs: { dense: "" } },
-            _vm._l(_vm.items, function(item) {
-              return _c(
-                "v-list-item",
-                { key: item.title, attrs: { link: "" } },
-                [
-                  _c(
-                    "v-list-item-icon",
-                    [_c("v-icon", [_vm._v(_vm._s(item.icon))])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item-content",
-                    [_c("v-list-item-title", [_vm._v(_vm._s(item.title))])],
-                    1
-                  )
-                ],
-                1
-              )
-            }),
-            1
           )
-        ],
-        1
+        ]
       )
     ],
     1
@@ -34509,7 +34543,15 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_c("div", { ref: "mapElement", attrs: { id: "mapid" } })])
+  return _c(
+    "div",
+    [
+      _c("v-container", { staticClass: "fill-height" }, [_c("side-bar")], 1),
+      _vm._v(" "),
+      _c("div", { ref: "mapElement", attrs: { id: "mapid" } })
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -93629,14 +93671,15 @@ __webpack_require__(/*! ./app/main */ "./resources/js/app/main.js");
 /*!********************************************************!*\
   !*** ./resources/js/app/components/drawer/SideBar.vue ***!
   \********************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SideBar_vue_vue_type_template_id_b976a0ca___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SideBar.vue?vue&type=template&id=b976a0ca& */ "./resources/js/app/components/drawer/SideBar.vue?vue&type=template&id=b976a0ca&");
 /* harmony import */ var _SideBar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SideBar.vue?vue&type=script&lang=js& */ "./resources/js/app/components/drawer/SideBar.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _SideBar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _SideBar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -93666,7 +93709,7 @@ component.options.__file = "resources/js/app/components/drawer/SideBar.vue"
 /*!*********************************************************************************!*\
   !*** ./resources/js/app/components/drawer/SideBar.vue?vue&type=script&lang=js& ***!
   \*********************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -93817,14 +93860,15 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
 /*!****************************************!*\
   !*** ./resources/js/app/views/App.vue ***!
   \****************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _App_vue_vue_type_template_id_51f47de4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App.vue?vue&type=template&id=51f47de4& */ "./resources/js/app/views/App.vue?vue&type=template&id=51f47de4&");
 /* harmony import */ var _App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App.vue?vue&type=script&lang=js& */ "./resources/js/app/views/App.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -93854,7 +93898,7 @@ component.options.__file = "resources/js/app/views/App.vue"
 /*!*****************************************************************!*\
   !*** ./resources/js/app/views/App.vue?vue&type=script&lang=js& ***!
   \*****************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

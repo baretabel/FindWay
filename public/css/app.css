@@ -1,1 +1,13 @@
 #mapid { height: 96vh; }
+#sideBar {
+    z-index: 9999;
+    background-color: none;
+}
+#btn-sideBar{
+    position: fixed;
+    z-index: 9998;
+}
+
+.sideBar-items {
+    height: 100%;
+}

@@ -1,42 +1,29 @@
 <template>
-  <nav>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant.sync="mini"
-      permanent
-    >
-      <v-list-item class="px-2">
-        <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
-        </v-list-item-avatar>
-
-        <v-list-item-title>John Leider</v-list-item-title>
-
-        <v-btn
-          icon
-          @click.stop="mini = !mini"
-        >
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-      </v-list-item>
-
-      <v-divider></v-divider>
-
-      <v-list dense>
-        <v-list-item
-          v-for="item in items"
-          :key="item.title"
-          link
-        >
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
+  <nav >
+    <v-btn elevation="3" id="btn-sideBar" @click="drawer = !drawer">button</v-btn>
+    <v-navigation-drawer v-model="drawer" absolute temporary id="sideBar" :width="450">
+      <div class="sideBar-items d-flex flex-column py-14 align-content-space-around justify-center">
+        <div class="d-flex flex-row align-center justify-center">
+          <v-btn>1</v-btn>
+          <v-btn>2</v-btn>
+          <v-btn>3</v-btn>
+        </div>
+        <div>
+          <v-autocomplete v-model="model" :items="states" persistent-hint prepend-icon="mdi-city">
+            <template v-slot:append-outer>
+              <v-slide-x-reverse-transition mode="out-in"></v-slide-x-reverse-transition>
+            </template>
+          </v-autocomplete>
+          <v-autocomplete v-model="model" :items="states" persistent-hint prepend-icon="mdi-city">
+            <template v-slot:append-outer>
+              <v-slide-x-reverse-transition mode="out-in"></v-slide-x-reverse-transition>
+            </template>
+          </v-autocomplete>
+        </div>
+        <p>Vous pouvez cliquez sur la carte pour adapter votre parcour</p>
+        <v-btn>Commencer le parcours ></v-btn>
+      </div>
+        
     </v-navigation-drawer>
   </nav>
 </template>
@@ -45,13 +32,24 @@
   export default {
     data () {
       return {
-        drawer: true,
-        items: [
-          { title: 'Home', icon: 'mdi-home-city' },
-          { title: 'My Account', icon: 'mdi-account' },
-          { title: 'Users', icon: 'mdi-account-group-outline' },
+        drawer: false,
+        model: null,
+        states: [
+          'Alabama', 'Alaska', 'American Samoa', 'Arizona',
+          'Arkansas', 'California', 'Colorado', 'Connecticut',
+          'Delaware', 'District of Columbia', 'Federated States of Micronesia',
+          'Florida', 'Georgia', 'Guam', 'Hawaii', 'Idaho',
+          'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky',
+          'Louisiana', 'Maine', 'Marshall Islands', 'Maryland',
+          'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi',
+          'Missouri', 'Montana', 'Nebraska', 'Nevada',
+          'New Hampshire', 'New Jersey', 'New Mexico', 'New York',
+          'North Carolina', 'North Dakota', 'Northern Mariana Islands', 'Ohio',
+          'Oklahoma', 'Oregon', 'Palau', 'Pennsylvania', 'Puerto Rico',
+          'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee',
+          'Texas', 'Utah', 'Vermont', 'Virgin Island', 'Virginia',
+          'Washington', 'West Virginia', 'Wisconsin', 'Wyoming',
         ],
-        mini: true,
       }
     },
   }
