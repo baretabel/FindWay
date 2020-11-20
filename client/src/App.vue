@@ -59,12 +59,17 @@ import SideBar from './components/drawer/SideBar';
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+#mapid { height: 96vh; }
+#sideBar {
+    z-index: 9999;
+    background-color: none;
+}
+#btn-sideBar{
+    position: fixed;
+    z-index: 9998;
+}
+
+.sideBar-items {
+    height: 100%;
 }
 </style>
