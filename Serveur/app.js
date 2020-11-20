@@ -7,7 +7,9 @@ const fs = require('fs')
 
 fs.readFile('./json/rue.geojson', function(erreur, fichier) {
     let rues = JSON.parse(fichier)
-    console.log(rues.features[0].properties)
+    
+    console.log(rues.features[0]
+        )
  })
 
 
