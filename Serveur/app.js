@@ -4,7 +4,7 @@ const app = express()
 const port = 3000
 const turf = require('@turf/turf')
 const fs = require('fs')
-
+const GeoJSON = require('geojson');
 fs.readFile('./json/rue.geojson', function(erreur, fichier) {
   let intersections=[];
   let rues = JSON.parse(fichier);
@@ -18,16 +18,16 @@ fs.readFile('./json/rue.geojson', function(erreur, fichier) {
     var intersection = turf.intersect(poly1, poly2);
     
     if(intersection){
-      
+      intersections.push(GeoJSON.parse({Point: intersection}))
       console.log(intersection);
-      var string = JSON.stringify(intersection,null,'\t');
+      
+    }
+    var string = JSON.stringify(intersection,null,'\t');
 
       fs.writeFile('./intersection.geojson',string,function(err) {
         if(err) return console.error(err);
         console.log('done');
       })
-    }
-    
     }
   }
   
