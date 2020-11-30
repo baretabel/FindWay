@@ -83,6 +83,7 @@
         this.drawer = false;
       },
       pathChoice(path) {
+        console.log(path)
         let walkPath = document.getElementById('walk-path')
         let bikePath = document.getElementById('bike-path')
         let carPath = document.getElementById('car-path')
@@ -117,6 +118,7 @@
   background: transparent;
   height: auto !important;
   width: auto !important;
+  box-shadow: none;
 }
 
 #sidebar-body {
