@@ -18,18 +18,19 @@ fs.readFile('./json/rue.geojson', function(erreur, fichier) {
     var intersection = turf.intersect(poly1, poly2);
     
     if(intersection){
-      intersections+=intersection;
+      
       console.log(intersection);
+      var string = JSON.stringify(intersection,null,'\t');
+
+      fs.writeFile('./intersection.geojson',string,function(err) {
+        if(err) return console.error(err);
+        console.log('done');
+      })
     }
     
     }
   }
-  var string = JSON.stringify(intersections,null,'\t');
-
-     fs.writeFile('./intersection.geojson',string,function(err) {
-       if(err) return console.error(err);
-       console.log('done');
-     })
+  
   console.log(intersections);
   /*
   rue1=rues.features[188].geometry.coordinates
