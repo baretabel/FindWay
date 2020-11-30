@@ -12,13 +12,13 @@
         </div>
         <div class="d-flex flex-row align-center justify-center">
           <v-btn-toggle class="btn-toggle" v-model="path">
-            <v-btn icon id="walk-path" class="btn-transparent" rounded value="walk" @click="selectStylePath()">
+            <v-btn icon id="walk-path" class="btn-transparent" rounded value="walk" @click="selectStylePath($event)">
               <v-icon>mdi-walk</v-icon>
             </v-btn>
-            <v-btn icon id="bike-path" class="btn-transparent" rounded value="bike" @click="selectStylePath()">
+            <v-btn icon id="bike-path" class="btn-transparent" rounded value="bike" @click="selectStylePath($event)">
               <v-icon>mdi-bike</v-icon>
             </v-btn>
-            <v-btn icon id="car-path" class="btn-transparent" rounded value="car" @click="selectStylePath()">
+            <v-btn icon id="car-path" class="btn-transparent" rounded value="car" @click="selectStylePath($event)">
               <v-icon>mdi-car</v-icon>
             </v-btn>
           </v-btn-toggle>
@@ -63,6 +63,7 @@
         drawer: false,
         model: null,
         path: undefined,
+        stylePath: '',
         states: [
           'Alabama', 'Alaska', 'American Samoa', 'Arizona',
           'Arkansas', 'California', 'Colorado', 'Connecticut',
@@ -82,8 +83,8 @@
       }
     },
     methods: {
-      close() {
-        this.drawer = false;
+      selectStylePath(event) {
+        this.stylePath = event.currentTarget.value;
       }
     }
   }
