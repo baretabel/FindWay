@@ -4,4 +4,4 @@ npm intall
 
 Etape 2: 
 Pour lancer le serveur:
-npm ren dev
+npm run dev
