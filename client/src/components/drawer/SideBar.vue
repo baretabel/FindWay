@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <v-btn icon elevation="3" id="btn-sideBar" class="btn-transparent" @click="drawer = !drawer">
+    <v-btn v-if="!drawer" icon elevation="3" id="btn-sideBar" class="btn-transparent" @click="drawer = !drawer">
       <v-icon>mdi-loupe</v-icon>
     </v-btn>
     <v-navigation-drawer v-model="drawer" absolute temporary right id="sideBar" :width="500" class="navigation-drawer">
@@ -9,6 +9,9 @@
           <v-btn icon class="btn-transparent">
             <v-icon @click="drawer = !drawer">mdi-close</v-icon>
           </v-btn>
+        </div>
+        <div v-if="errorStr">
+          <p class="msg-error">{{ errorStr }}</p>
         </div>
         <div class="d-flex flex-row align-center justify-center">
           <v-btn-toggle class="btn-toggle" v-model="path">
@@ -26,7 +29,7 @@
         <br>
         <div class="row">
           <div class="input-gps">
-            <v-btn class="no-btn">
+            <v-btn class="btn no-btn" @click="getLocalisation">
               <v-icon>mdi-crosshairs-gps</v-icon>
               <p>Me localiser</p>
             </v-btn>
@@ -64,6 +67,9 @@
         model: null,
         path: undefined,
         stylePath: '',
+        location: {},
+        gettingLocation: false,
+        errorStr: null,
         states: [
           'Alabama', 'Alaska', 'American Samoa', 'Arizona',
           'Arkansas', 'California', 'Colorado', 'Connecticut',
@@ -85,6 +91,18 @@
     methods: {
       selectStylePath(event) {
         this.stylePath = event.currentTarget.value;
+        console.log(this.stylePath)
+      },
+      getLocalisation() {
+        navigator.geolocation.getCurrentPosition(pos => {
+          this.gettingLocation = false;
+          this.location = {'latitude' : pos.coords.latitude, 'longitude' : pos.coords.longitude};
+          console.log(this.location)
+        }, err => {
+          this.gettingLocation = false;
+          this.errorStr = err.message;
+          console.log(this.errorStr)
+        })
       }
     }
   }
@@ -169,5 +187,14 @@
 
 .v-item--active i, .v-btn--active i {
   color: darkgreen !important;
+}
+
+.msg-error {
+  background: lightcoral;
+  border: 0.5px black solid;
+  padding: 10px;
+  font-size: 12px;
+  margin: 5px;
+  color: black;
 }
 </style>
