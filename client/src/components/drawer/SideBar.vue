@@ -1,29 +1,54 @@
 <template>
-  <nav >
-    <v-btn elevation="3" id="btn-sideBar" @click="drawer = !drawer">button</v-btn>
-    <v-navigation-drawer v-model="drawer" absolute temporary id="sideBar" :width="450">
-      <div class="sideBar-items d-flex flex-column py-14 align-content-space-around justify-center">
+  <nav>
+    <v-btn elevation="3" id="btn-sideBar" class="btn-transparent" @click="drawer = !drawer">
+      <v-icon class="md-36">mdi-menu</v-icon>
+    </v-btn>
+    <v-navigation-drawer v-model="drawer" absolute temporary right id="sideBar" :width="500" class="navigation-drawer">
+      <div id="sidebar-body" class="sideBar-items d-flex flex-column align-content-space-around justify-center">
+        <div class="btn-close">
+          <v-btn class="btn-transparent">
+            <v-icon @click="drawer = !drawer">mdi-close</v-icon>
+          </v-btn>
+        </div>
         <div class="d-flex flex-row align-center justify-center">
-          <v-btn>1</v-btn>
-          <v-btn>2</v-btn>
-          <v-btn>3</v-btn>
+          <v-btn id="walk-path" class="btn-transparent" rounded @click="pathChoice('walk')">
+            <v-icon>mdi-walk</v-icon>
+          </v-btn>
+          <v-btn id="bike-path" class="btn-transparent" rounded @click="pathChoice('bike')">
+            <v-icon>mdi-bike</v-icon>
+          </v-btn>
+          <v-btn id="car-path" class="btn-transparent" rounded @click="pathChoice('car')">
+            <v-icon>mdi-car</v-icon>
+          </v-btn>
         </div>
-        <div>
-          <v-autocomplete v-model="model" :items="states" persistent-hint prepend-icon="mdi-city">
-            <template v-slot:append-outer>
-              <v-slide-x-reverse-transition mode="out-in"></v-slide-x-reverse-transition>
-            </template>
-          </v-autocomplete>
-          <v-autocomplete v-model="model" :items="states" persistent-hint prepend-icon="mdi-city">
-            <template v-slot:append-outer>
-              <v-slide-x-reverse-transition mode="out-in"></v-slide-x-reverse-transition>
-            </template>
-          </v-autocomplete>
+        <div class="row">
+          <div class="input-gps">
+            <v-btn class="no-btn">
+              <v-icon>mdi-crosshairs-gps</v-icon>
+              <p>Me localiser</p>
+            </v-btn>
+          </div>
+          <div class="input-start">
+            <v-autocomplete v-model="model" :items="states" persistent-hint prepend-icon="mdi-city">
+              <template v-slot:append-outer>
+                <v-slide-x-reverse-transition mode="out-in"></v-slide-x-reverse-transition>
+              </template>
+            </v-autocomplete>
+          </div>
+          <div class="input-end">
+            <v-autocomplete v-model="model" :items="states" persistent-hint prepend-icon="mdi-city">
+              <template v-slot:append-outer>
+                <v-slide-x-reverse-transition mode="out-in"></v-slide-x-reverse-transition>
+              </template>
+            </v-autocomplete>
+          </div>
         </div>
-        <p>Vous pouvez cliquez sur la carte pour adapter votre parcour</p>
-        <v-btn>Commencer le parcours ></v-btn>
+        <div class="drawer-footer py-5">
+          <p class="p-drawer-footer">Vous pouvez cliquez sur la carte pour adapter votre parcour</p>
+          <v-btn class="btn-drawer-footer">Commencer le parcours ></v-btn>
+        </div>
       </div>
-        
+
     </v-navigation-drawer>
   </nav>
 </template>
@@ -52,9 +77,102 @@
         ],
       }
     },
+    methods: {
+      close() {
+        this.drawer = false;
+      },
+      pathChoice(path) {
+        let walkPath = document.getElementById('walk-path')
+        let bikePath = document.getElementById('bike-path')
+        let carPath = document.getElementById('car-path')
+
+        if(path === 'walk') {
+          walkPath.classList.add('select-path');
+          bikePath.classList.remove('select-path');
+          carPath.classList.remove('select-path');
+        }
+        if(path === 'bike') {
+          bikePath.classList.add('select-path');
+          walkPath.classList.remove('select-path');
+          carPath.classList.remove('select-path');
+        }
+        if(path === 'car') {
+          carPath.classList.add('select-path');
+          walkPath.classList.remove('select-path');
+          bikePath.classList.remove('select-path');
+        }
+      },
+      actions: {
+
+      }
+    }
   }
 </script>
 
 <style>
 
+#sideBar {
+  z-index: 9999;
+  background: transparent;
+  height: auto !important;
+  width: auto !important;
+}
+
+#sidebar-body {
+  background: lightblue;
+  height: auto;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.btn-close {
+  display: flex;
+  justify-content: end;
+}
+
+#btn-sideBar {
+  background: transparent;
+}
+
+.select-path {
+  background: lightgreen !important;
+  border: 0.5px green solid;
+}
+
+.btn-transparent {
+  margin-right: 5px;
+}
+
+#btn-sideBar i {
+  font-size: 50px;
+}
+
+.navigation-drawer {
+  padding: 15px;
+  height: auto;
+}
+.drawer-footer {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+.p-drawer-footer {
+  font-size: 16px;
+  padding: 5px;
+}
+.btn-drawer-footer {
+  margin-top: 10px;
+}
+.no-btn {
+  background: none !important;
+  box-shadow: none !important;
+  height: auto;
+  margin: auto;
+}
+.input-gps, .input-start, .input-end {
+  display: flex;
+  justify-content: start;
+  align-content: baseline;
+  margin: auto;
+}
 </style>

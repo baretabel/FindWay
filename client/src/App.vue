@@ -25,7 +25,7 @@ import SideBar from './components/drawer/SideBar';
         },
         mounted() {
             var mymap = L.map(this.$refs['mapElement']).setView([-20.880991, 55.449446], 13);
-            
+
             L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoieW91diIsImEiOiJja2hlaHp6YnkwOHRqMzFwNWlmdmhtN3h4In0.e3EQyB9RFf547diSz_Xt0Q', {
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery :copyright: <a href="https://www.mapbox.com/">Mapbox</a>',
                 maxZoom:18,
@@ -43,7 +43,7 @@ import SideBar from './components/drawer/SideBar';
             }
             var marker = L.marker([-20.880991, 55.449446], markerOptions).addTo(mymap);
             marker.draggable;
-            marker.bindPopup("<b>Hello world!</b><br>I am a popup.");   
+            marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
             // var addressSearchResults = new L.LayerGroup().addTo(mymap);
 
             // On click show popup
@@ -60,16 +60,22 @@ import SideBar from './components/drawer/SideBar';
 
 <style>
 #mapid { height: 96vh; }
-#sideBar {
-    z-index: 9999;
-    background-color: none;
+
+nav {
+  width: 100%;
+  display: flex;
+  justify-content: end;
 }
 #btn-sideBar{
     position: fixed;
     z-index: 9998;
+    margin: 5px;
 }
 
 .sideBar-items {
     height: 100%;
+}
+.container {
+  padding: 0 !important;
 }
 </style>
