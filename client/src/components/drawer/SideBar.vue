@@ -197,4 +197,8 @@
   margin: 5px;
   color: black;
 }
+
+.v-navigation-drawer__border {
+  background: none !important;
+}
 </style>
