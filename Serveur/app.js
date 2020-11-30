@@ -16,22 +16,25 @@ fs.readFile('./json/rue.geojson', function(erreur, fichier) {
     var poly1 = turf.multiLineString(rue1);
     var poly2 = turf.multiLineString(rue2);
     var intersection = turf.intersect(poly1, poly2);
-    
-    if(intersection){
-      intersections.push(GeoJSON.parse({Point: intersection}))
-      console.log(intersection);
-      
+    var type='lal';
+    if(intersection !== null){
+      if(intersection.geometry.type=='Point'){
+        console.log(intersection),
+      intersections.push({rue1 : rues.features[i].properties.FID, rue2 : rues.features[y].properties.FID, intersection: intersection.geometry.coordinates})
+      }
     }
-    var string = JSON.stringify(intersection,null,'\t');
+    
+    }
+  }
+  intersections=GeoJSON.parse(intersections,{Point: 'intersection'})
+    console.log(intersections);
+    var string = JSON.stringify(intersections,null,'\t');
 
       fs.writeFile('./intersection.geojson',string,function(err) {
         if(err) return console.error(err);
         console.log('done');
       })
-    }
-  }
   
-  console.log(intersections);
   /*
   rue1=rues.features[188].geometry.coordinates
   rue2=rues.features[27].geometry.coordinates
