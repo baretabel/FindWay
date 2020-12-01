@@ -5,6 +5,7 @@ const port = 3000
 const turf = require('@turf/turf')
 const fs = require('fs')
 const GeoJSON = require('geojson');
+var router = require('./routes/api.js');
 
 
 /*fs.readFile('./json/rues.geojson', async function(erreur, fichier) {
@@ -46,7 +47,7 @@ async function segment(rues,intersections) {
   console.log('toto')
 }*/
 
-
+app.use('/api', router);
 app.get('/', (req, res) => {
 
 })
