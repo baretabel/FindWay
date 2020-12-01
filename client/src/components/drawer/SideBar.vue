@@ -43,14 +43,14 @@
               </v-btn>
             </div>
             <div class="input-start">
-              <v-autocomplete v-model="model" :items="states" persistent-hint prepend-icon="mdi-city" placeholder="Mon point de depart">
+              <v-autocomplete v-model="model" persistent-hint prepend-icon="mdi-city" placeholder="Mon point de depart">
                 <template v-slot:append-outer>
                   <v-slide-x-reverse-transition mode="out-in"></v-slide-x-reverse-transition>
                 </template>
               </v-autocomplete>
             </div>
             <div class="input-end">
-              <v-autocomplete v-model="model" :items="states" persistent-hint prepend-icon="mdi-city" placeholder="Ma destination">
+              <v-autocomplete v-model="model" persistent-hint prepend-icon="mdi-city" placeholder="Ma destination">
                 <template v-slot:append-outer>
                   <v-slide-x-reverse-transition mode="out-in"></v-slide-x-reverse-transition>
                 </template>

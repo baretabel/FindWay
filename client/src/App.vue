@@ -27,7 +27,43 @@ import SideBar from './components/drawer/SideBar';
                 },
               marker: undefined,
               markerOptions: undefined,
-              mymap : undefined
+              mymap : undefined,
+              drawMap : [
+                [
+                  [//All World
+                    [90, -180],
+                    [90, 180],
+                    [-90, 180],
+                    [-90, -180]
+                  ],
+                  [// Saint-Denis
+                    [-20.896094202327, 55.375863528729],
+                    [-20.882986388171, 55.394036917298],
+                    [-20.874440484519, 55.421141873335],
+                    [-20.871364130562608, 55.44965028762818],
+                    [-20.882341920577, 55.502079518399],
+                    [-20.911634326555, 55.507304218581],
+                    [-20.922363956399, 55.513068631875],
+                    [-20.936455014075, 55.501582350011],
+                    [-20.970606365504, 55.490805191991],
+                    [-20.988794971872, 55.491010134145],
+                    [-20.993355884985, 55.480142895002],
+                    [-21.002251689156, 55.477496906162],
+                    [-21.009928584234, 55.468887949541],
+                    [-21.015120564276, 55.461144439045],
+                    [-21.001345667221, 55.451961587332],
+                    [-20.992013858698, 55.43953411936],
+                    [-20.983318185699, 55.419412781816],
+                    [-20.98179857228, 55.403694622206],
+                    [-20.956669460011, 55.40716560768],
+                    [-20.935979058912, 55.391745643379],
+                    [-20.925003636364, 55.388652586783],
+                    [-20.90991541857, 55.379073619095],
+                    [-20.896094202327, 55.375863528729]
+                  ]
+                ],
+              ]
+
             }
         },
         mounted() {
@@ -42,6 +78,10 @@ import SideBar from './components/drawer/SideBar';
               accessToken: 'your.mapbox.access.token'
           }).addTo(this.mymap);
 
+          let polygonSaintDenis = L.polygon(this.drawMap, {color: 'blue'}).addTo(this.mymap);
+
+          this.mymap.fitBounds(polygonSaintDenis.getBounds());
+
           // Options for the marker
           this.markerOptions = {
               title: "MyLocation",
@@ -49,17 +89,16 @@ import SideBar from './components/drawer/SideBar';
               draggable: true
           }
           this.marker = L.marker([this.location.latitude, this.location.longitude], this.markerOptions).addTo(this.mymap);
-          // this.marker.draggable;
-          // this.marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
+          this.marker.draggable;
+          this.marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
           // var addressSearchResults = new L.LayerGroup().addTo(mymap);
 
           // On click show popup
-          // var popup = L.popup();
-          // function onMapClick(e) {
-          //     this.marker = L.marker([e.latlng.lat, e.latlng.lng], this.markerOptions).addTo(this.mymap);
-          // }
+          function onMapClick(e) {
+            console.log(e)
+          }
           // marker.on('click', removeMarker);
-          // this.mymap.on('click', onMapClick);
+          this.mymap.on('click', onMapClick);
         },
       methods : {
         setMarker(location) {
