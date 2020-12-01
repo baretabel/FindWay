@@ -48,7 +48,7 @@ async function segment(rues,intersections) {
 
 
 app.get('/', (req, res) => {
-    
+
 })
 
 app.listen(port, () => {
