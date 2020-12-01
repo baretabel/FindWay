@@ -5,47 +5,49 @@ const port = 3000
 const turf = require('@turf/turf')
 const fs = require('fs')
 const GeoJSON = require('geojson');
-fs.readFile('./json/rue.geojson', function(erreur, fichier) {
-  let intersections=[];
-  let rues = JSON.parse(fichier);
+var router = require('./routes/api.js');
 
-  for (let i = 0; i < rues.features.length; i++) {
-    for (let y = 0; y < rues.features.length; y++){
-    rue1=rues.features[i].geometry.coordinates
-    rue2=rues.features[y].geometry.coordinates
-    var poly1 = turf.multiLineString(rue1);
-    var poly2 = turf.multiLineString(rue2);
-    var intersection = turf.intersect(poly1, poly2);
-    var type='lal';
-    if(intersection !== null){
-      if(intersection.geometry.type=='Point'){
-        console.log(intersection),
-      intersections.push({rue1 : rues.features[i].properties.FID, rue2 : rues.features[y].properties.FID, intersection: intersection.geometry.coordinates})
-      }
-    }
 
-    }
-  }
-  intersections=GeoJSON.parse(intersections,{Point: 'intersection'})
-    console.log(intersections);
-    var string = JSON.stringify(intersections,null,'\t');
-
-      fs.writeFile('./intersection.geojson',string,function(err) {
-        if(err) return console.error(err);
-        console.log('done');
-      })
-
-  /*
-  rue1=rues.features[188].geometry.coordinates
-  rue2=rues.features[27].geometry.coordinates
-  var poly1 = turf.multiLineString(rue1);
-  var poly2 = turf.multiLineString(rue2);
-  var intersection = turf.intersect(poly1, poly2);
-
-  console.log(intersection);*/
+/*fs.readFile('./json/rues.geojson', async function(erreur, fichier) {
+  rues = JSON.parse(fichier);
+  console.log(rues);
+  fs.readFile('./intersection.geojson', async function(erreur, data) {
+    intersections =JSON.parse(data);
+    await segment(rues,intersections)
+  })
+  
 })
 
+async function segment(rues,intersections) {
+  
+  for (let i = 0; i < rues.features.length; i++) {
+    rue=rues.features[i];
+    
+      for (let j = 0; j < rue.geometry.coordinates[0][j].length-1; j++) {
+        point1 = rue.geometry.coordinates[0][j];
+        point2 = rue.geometry.coordinates[0][j+1];
+        
+        start = turf.point(point1);
+        end =turf.point(point2);
+        line = turf.lineString([point1,point2]);
+        console.log(line)
+        //microSegment= turf.lineSlice(start,end,line)
+              
+        for (let y = 0; y < intersections.features.length; y++) {
+          intersection= intersections.features[y];
+          //console.log(rue.properties.FID+" "+intersection.properties.rue1+" "+intersection.properties.rue2) 
+          
+          if(rue.properties.FID==intersection.properties.rue1 || rue.properties.FID==intersection.properties.rue2){
+            bool=turf.booleanPointOnLine(intersection,line);
+            console.log(bool);
+          }
+        }
+      }
+  }
+  console.log('toto')
+}*/
 
+app.use('/api', router);
 app.get('/', (req, res) => {
 
 })
