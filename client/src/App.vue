@@ -1,9 +1,9 @@
 <template>
 
     <div>
-        <v-container class="fill-height">
+        <v-container-fluid class="fill-height">
             <SideBar @setMarker="setMarker"/>
-        </v-container>
+        </v-container-fluid>
         <div id="mapid" ref="mapElement"></div>
     </div>
 
