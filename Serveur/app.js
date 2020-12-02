@@ -17,8 +17,10 @@ json.addIntersection(intersection.setIntersections());*/
 segment=new Segment;
 segment.initialize()
 segment.rues.features.forEach(rue => {
-  
+  if(rue != undefined){
+
    segment.getRue(rue);
+  }
 });
 
 

@@ -1,12 +1,15 @@
 const fs = require('fs')
 const turf = require('@turf/turf')
 function Segment(){
+    this.fin=false
  this.rues
  this.rue
  this.end
  this.start
  this.line
  this.intersections
+ this.segments=[]
+ this.segment=[]
 }
 Segment.prototype.initialize = function () {
     this.rues=fs.readFileSync('./json/rues.geojson', function(erreur, fichier) {
@@ -22,19 +25,27 @@ Segment.prototype.initialize = function () {
     
 }
 Segment.prototype.getRue=function (rue){
-    this.rue=rue
+    this.rue=rue;
+    console.log(this.rue.properties.FID);
     this.setGeo()
     
 }
 Segment.prototype.setGeo= function () {
     for (let j = 0; j < this.rue.geometry.coordinates[0][j].length-1; j++) {
+        this.fin=false;
         point1 = this.rue.geometry.coordinates[0][j];
         point2 = this.rue.geometry.coordinates[0][j+1];
         this.start = turf.point(point1);
         this.end =turf.point(point2);
         this.line = turf.lineString([point1,point2]);
         //microSegment= turf.lineSlice(start,end,line)
-        this.getBoolean();
+        if(j==this.rue.geometry.coordinates[0][j].length-1){
+            this.fin=true;
+            console.log(this.fin)
+        }
+            this.getBoolean();
+        
+        
     }
 }
 Segment.prototype.getBoolean=function (){
@@ -45,12 +56,33 @@ Segment.prototype.getBoolean=function (){
         
         if(this.rue.properties.FID==intersection.properties.rue1 || this.rue.properties.FID==intersection.properties.rue2){
           bool=turf.booleanPointOnLine(intersection,this.line);
-          console.log(bool);
-          if(bool==false){
-              //segments.push
+          
+          if(this.fin==true){
+            this.segment.push(this.end.geometry.coordinates)
+            segment=turf.lineString(this.segment)
+            console.log('totaaa')
+            this.segments.push(segment)
+            this.segment=[]
+            console.log(this.segments)
+          }else{
+              if(bool==false){
+                this.segment.push(this.start.geometry.coordinates)
+                console.log(this.segment)
+              }else if(bool==true){
+                this.segment.push(intersection.geometry.coordinates)
+                console.log('totoo')
+                segment=turf.lineString(this.segment)
+                this.segments.push(segment)
+                this.segment=[]
+                this.segment.push(intersection.geometry.coordinates)
+                console.log(this.segments)
+              }
           }
+          
         }
+        
       }
+    
 }
     
 
