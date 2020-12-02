@@ -1,7 +1,13 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const bodyParser = require('body-parser')
+
 //definir controller
-var controller = require('../controller/Controller');
+let controller = require('../controller/Controller');
+
 // defintion route
+router.use(bodyParser.json());
+
 router.get('/', controller.index);
+
 module.exports = router;

@@ -1,8 +1,9 @@
 import 'material-design-icons-iconfont/dist/material-design-icons.css' //
 import Vue from 'vue'
-import App from './App.vue'
-import Vuetify from 'vuetify';
-import 'vuetify/dist/vuetify.min.css';
+import Layout from './layout/layout.vue'
+import Router from './router.js'
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
 
 Vue.config.productionTip = false
 Vue.use(Vuetify, {
@@ -10,6 +11,8 @@ Vue.use(Vuetify, {
 })
 
 new Vue({
-  vuetify: new Vuetify(),
-  render: h => h(App),
+  render: h => h(Layout),
+  vuetify: new Vuetify({}),
+  router: Router,
+  components: { Layout }
 }).$mount('#app')
