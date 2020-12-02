@@ -1,8 +1,7 @@
 'use strict';
-var db=require("../models/index");
+
 const fs = require('fs');
 const turf = require('@turf/turf');
-const carrefour =require('../models/carrefour') ;
 
 const fichier =fs.readFileSync('./json/rue.geojson');
 module.exports = {
