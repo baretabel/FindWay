@@ -5,10 +5,11 @@ const port = 3000
 const turf = require('@turf/turf')
 const fs = require('fs')
 const GeoJSON = require('geojson');
-var router = require('./routes/api.js');
-var Segment = require('./app/segments.js')
-var Json = require('./app/generJson.js')
-var Intersection = require('./app/intersection.js')
+
+let router = require('./routes/api.js');
+let Segment = require('./app/segments.js')
+let Json = require('./app/generJson.js')
+let Intersection = require('./app/intersection.js')
 /*json=new Json
 intersection= new Intersection;
 intersection.getRues();
