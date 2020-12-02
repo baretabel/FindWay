@@ -44,6 +44,7 @@
             </div>
             <div class="input-start">
               <v-autocomplete id="input1" v-model="input1" :search-input.sync="searchStartAdress" item-value="id" :items="adresses" persistent-hint prepend-icon="mdi-city" placeholder="Mon point de depart">
+
                 <template v-slot:append-outer>
                   <v-slide-x-reverse-transition
                     mode="out-in"
@@ -60,6 +61,7 @@
             </div>
             <div class="input-end">
               <v-autocomplete id="input2" v-model="input2" :search-input.sync="searchEndAdress" item-value="id" :items="adresses" persistent-hint prepend-icon="mdi-city" placeholder="Mon point d'arrivé ">
+
                 <template v-slot:append-outer>
                   <v-slide-x-reverse-transition
                     mode="out-in"
