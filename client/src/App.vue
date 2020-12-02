@@ -1,9 +1,9 @@
 <template>
 
     <div>
-        <v-container-fluid class="fill-height">
-            <SideBar @setMarker="setMarker"/>
-        </v-container-fluid>
+        <v-container class="fill-height">
+            <SideBar @setMarker="setMarker" @addStartingAdress="startingAdress" @addEndAdress="endAdress"/>
+        </v-container>
         <div id="mapid" ref="mapElement"></div>
     </div>
 
@@ -26,6 +26,7 @@ import SideBar from './components/drawer/SideBar';
                   longitude: 55.449446
                 },
               marker: undefined,
+              endMarker: undefined,
               markerOptions: undefined,
               mymap : undefined,
               drawMap : [
@@ -89,8 +90,9 @@ import SideBar from './components/drawer/SideBar';
               draggable: true
           }
           this.marker = L.marker([this.location.latitude, this.location.longitude], this.markerOptions).addTo(this.mymap);
-          this.marker.draggable;
-          this.marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
+          this.endMarker = L.marker([this.location.latitude, this.location.longitude], this.markerOptions).addTo(this.mymap);
+          // this.marker.draggable;
+          // this.marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
           // var addressSearchResults = new L.LayerGroup().addTo(mymap);
 
           // On click show popup
@@ -113,7 +115,37 @@ import SideBar from './components/drawer/SideBar';
           this.marker.remove()
 
           this.marker = L.marker([this.location.latitude, this.location.longitude], {icon: greenIcon}).addTo(this.mymap);
-        }
+        },
+
+        startingAdress(data) {
+          let greenIcon = L.icon({
+            iconUrl: 'map-marker.png',
+              options: {
+                iconColor: 'green',
+              }
+          });
+          this.location = location
+
+          this.marker.remove()
+          console.log(data)
+
+          this.marker = L.marker([ data.geometry.coordinates[1], data.geometry.coordinates[0], {icon: greenIcon} ]).addTo(this.mymap);
+        },
+
+        endAdress(data) {
+          let greenIcon = L.icon({
+            iconUrl: 'map-marker.png',
+              options: {
+                iconColor: 'green',
+              }
+          });
+          this.location = location
+
+          this.endMarker.remove()
+          console.log(data)
+
+          this.endMarker = L.marker([ data.geometry.coordinates[1], data.geometry.coordinates[0], {icon: greenIcon} ]).addTo(this.mymap);
+        },
       }
     }
 

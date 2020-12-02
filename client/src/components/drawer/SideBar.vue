@@ -1,5 +1,5 @@
 <template>
-  <v-card id="sidebar-card">
+  <v-card id="sidebar-card" data-app>
     <v-btn v-if="!drawer" icon elevation="3" id="btn-sideBar" class="btn-transparent" @click="drawer = !drawer">
       <v-icon>mdi-loupe</v-icon>
     </v-btn>
@@ -43,16 +43,36 @@
               </v-btn>
             </div>
             <div class="input-start">
-              <v-autocomplete v-model="model" persistent-hint prepend-icon="mdi-city" placeholder="Mon point de depart">
+              <v-autocomplete id="input1" v-model="input1" :search-input.sync="searchStartAdress" item-value="id" :items="adresses" persistent-hint prepend-icon="mdi-city" placeholder="Mon point de depart">
+
                 <template v-slot:append-outer>
-                  <v-slide-x-reverse-transition mode="out-in"></v-slide-x-reverse-transition>
+                  <v-slide-x-reverse-transition
+                    mode="out-in"
+                  >
+                    <v-icon
+                      :key="`icon-mdi-map-marker`"
+                      :color="'success'"
+                      @click="addStartingAdress()"
+                      v-text="'mdi-map-marker'"
+                    ></v-icon>
+                  </v-slide-x-reverse-transition>
                 </template>
               </v-autocomplete>
             </div>
             <div class="input-end">
-              <v-autocomplete v-model="model" persistent-hint prepend-icon="mdi-city" placeholder="Ma destination">
+              <v-autocomplete id="input2" v-model="input2" :search-input.sync="searchEndAdress" item-value="id" :items="adresses" persistent-hint prepend-icon="mdi-city" placeholder="Mon point d'arrivé ">
+
                 <template v-slot:append-outer>
-                  <v-slide-x-reverse-transition mode="out-in"></v-slide-x-reverse-transition>
+                  <v-slide-x-reverse-transition
+                    mode="out-in"
+                  >
+                    <v-icon
+                      :key="`icon-mdi-map-marker`"
+                      :color="'success'"
+                      @click="addEndAdress()"
+                      v-text="'mdi-map-marker'"
+                    ></v-icon>
+                  </v-slide-x-reverse-transition>
                 </template>
               </v-autocomplete>
             </div>
@@ -61,7 +81,7 @@
 
         <div id="sidebar-footer">
           <small class="sidebar-footer-small text-center">Vous pouvez cliquez sur la carte pour adapter votre parcour</small>
-          <v-btn class="sidebar-footer-btn">Commencer ></v-btn>
+          <v-btn class="sidebar-footer-btn" @click="addStartingAdress()">Commencer ></v-btn>
         </div>
 
       </div>
@@ -71,22 +91,30 @@
 </template>
 
 <script>
+import axios from 'axios';
+
   export default {
     data () {
       return {
         drawer: false,
-        model: null,
+        input1: null,
+        input2: null,
+        searchStartAdress: null,
+        searchEndAdress: null,
         path: undefined,
         stylePath: '',
         location: {},
         gettingLocation: false,
         errorStr: null,
+        adresses: [],
+        selectedAdress: [],
+        data: [],
+
       }
     },
     methods: {
       selectStylePath(event) {
         this.stylePath = event.currentTarget.value;
-        console.log(this.stylePath)
       },
       getLocalisation() {
         navigator.geolocation.getCurrentPosition(pos => {
@@ -97,8 +125,52 @@
           this.gettingLocation = false;
           this.errorStr = err.message;
         })
+      },
+
+      addStartingAdress() {
+        this.$emit('addStartingAdress', this.selectedAdress)
+      },
+
+      addEndAdress() {
+        this.$emit('addEndAdress', this.selectedAdress)
+      },
+
+      async search(val) {
+        this.selectedAdress = [];
+        this.data = [];
+        this.adresses = [];
+        // var data = [];
+        var saintDenisCP = ['97400', '97417', '97490'];
+
+        // get adresses : api gouv géo
+        await axios.get('https://api-adresse.data.gouv.fr/search/?q=' + val + '&type=&autocomplete=1').then((response) => {
+          response.data.features.forEach(element => {
+            if(saintDenisCP.includes(element.properties.postcode)) {
+              this.selectedAdress = element;
+              this.data.push(element)
+            }
+          });
+        })
+        .catch( (error) => {
+          console.log(error)
+        })
+        // Autocomplete data
+        this.data.forEach(item => {
+          // console.log(item.properties.label)
+          this.adresses.push(item.properties.label)
+        })
       }
-    }
+    },
+
+    watch: {
+      searchStartAdress(val) {
+        this.search(val)
+      },
+      searchEndAdress(val) {
+        this.search(val)
+      },
+      
+    },
   }
 </script>
 
