@@ -8,14 +8,15 @@ function Intersection(){
     this.id=0;
 }
 
-Intersection.prototype.getPoint = function(rue1,rue2){
+Intersection.prototype.setPoint = function(rue1,rue2){
     var poly1 = turf.multiLineString(rue1.geometry.coordinates);
     var poly2 = turf.multiLineString(rue2.geometry.coordinates);
-    var intersection = turf.intersect(poly1, poly2);
-    if(intersection !== null){
-        if(intersection.geometry.type=='Point'){
+    var intersection = turf.lineIntersect(poly1, poly2);
+    if(intersection.features.length==1){
+      console.log(intersection.features[0].geometry)
+        if(intersection.features[0].geometry.type=='Point'){
         
-        this.point={ id:this.id, rue1 : rue1.properties.FID, rue2 : rue2.properties.FID, intersection: intersection.geometry.coordinates}
+        this.point={ id:this.id, rue1 : rue1.properties.FID, rue2 : rue2.properties.FID, intersection: intersection.features[0].geometry.coordinates}
         }
     }
     return this.point
@@ -29,12 +30,12 @@ Intersection.prototype.getRues = function(){
     this.rues=JSON.parse(this.rues)
     
 }
-Intersection.prototype.getIntersections= function(){ 
+Intersection.prototype.setIntersections= function(){ 
    for (let i = 0; i < this.rues.features.length; i++) {
         for (let y = 0; y < this.rues.features.length; y++){
             rue1=this.rues.features[i]
             rue2=this.rues.features[y]
-            this.intersections.push(this.getPoint(rue1,rue2));
+            this.intersections.push(this.setPoint(rue1,rue2));
             this.id++
         }
     }

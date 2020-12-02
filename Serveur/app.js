@@ -7,9 +7,19 @@ const fs = require('fs')
 const GeoJSON = require('geojson');
 var router = require('./routes/api.js');
 var Segment = require('./app/segments.js')
+var Json = require('./app/generJson.js')
+var Intersection = require('./app/intersection.js')
+/*json=new Json
+intersection= new Intersection;
+intersection.getRues();
+json.addIntersection(intersection.setIntersections());*/
 
 segment=new Segment;
 segment.initialize()
+segment.rues.features.forEach(rue => {
+  
+   segment.getRue(rue);
+});
 
 
 /*fs.readFile('./json/rues.geojson', async function(erreur, fichier) {
