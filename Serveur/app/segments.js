@@ -1,17 +1,28 @@
-
-const express = require('express')
-const app = express()
-const port = 3000
-const turf = require('@turf/turf')
 const fs = require('fs')
-const GeoJSON = require('geojson');
-var router = require('./routes/api.js');
-var Segment = require('./app/segments.js')
-
-segment=new Segment;
-segment.initialize()
-
-
+const turf = require('@turf/turf')
+function Segment(){
+ this.rues
+ this.rues
+ this.intersections
+}
+Segment.prototype.initialize = function () {
+    this.rues=fs.readFileSync('./json/rues.geojson', function(erreur, fichier) {
+        rues=JSON.parse(fichier)
+        return rues
+    })
+    this.rues=JSON.parse(this.rues)
+    this.intersections=fs.readFileSync('./intersection.geojson', function(erreur, fichier) {
+        intersections=JSON.parse(fichier)
+        return intersections
+    })
+    this.intersections=JSON.parse(this.intersections)
+    console.log(this.intersections)
+}
+Segment.prototype.getRue=function (rue,index){
+    this.rue=rue.features[index]
+}
+Segment.
+module.exports = Segment;
 /*fs.readFile('./json/rues.geojson', async function(erreur, fichier) {
   rues = JSON.parse(fichier);
   console.log(rues);
@@ -50,12 +61,3 @@ async function segment(rues,intersections) {
   }
   console.log('toto')
 }*/
-
-app.use('/api', router);
-app.get('/', (req, res) => {
-
-})
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
