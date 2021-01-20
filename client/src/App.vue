@@ -68,11 +68,12 @@ import SideBar from './components/drawer/SideBar';
             }
         },
         mounted() {
-          this.mymap = L.map(this.$refs['mapElement']).setView([-20.880991, 55.449446], 13)
+          this.mymap = L.map(this.$refs['mapElement']).setView([-20.880991, 55.449446], 19)
 
           L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoieW91diIsImEiOiJja2hlaHp6YnkwOHRqMzFwNWlmdmhtN3h4In0.e3EQyB9RFf547diSz_Xt0Q', {
               attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery :copyright: <a href="https://www.mapbox.com/">Mapbox</a>',
               maxZoom:18,
+              minZoom: 13,
               id: 'mapbox/streets-v11',
               tileSize: 512,
               zoomOffset: -1,
@@ -89,8 +90,8 @@ import SideBar from './components/drawer/SideBar';
               clickable: true,
               draggable: true
           }
-          this.marker = L.marker([this.location.latitude, this.location.longitude], this.markerOptions).addTo(this.mymap);
-          this.endMarker = L.marker([this.location.latitude, this.location.longitude], this.markerOptions).addTo(this.mymap);
+          // this.marker = L.marker([this.location.latitude, this.location.longitude], this.markerOptions).addTo(this.mymap);
+          // this.endMarker = L.marker([this.location.latitude, this.location.longitude], this.markerOptions).addTo(this.mymap);
           // this.marker.draggable;
           // this.marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
           // var addressSearchResults = new L.LayerGroup().addTo(mymap);
@@ -112,7 +113,9 @@ import SideBar from './components/drawer/SideBar';
           });
           this.location = location
 
-          this.marker.remove()
+          if(this.marker != undefined) {
+            this.marker.remove()
+          }
 
           this.marker = L.marker([this.location.latitude, this.location.longitude], {icon: greenIcon}).addTo(this.mymap);
         },
@@ -125,9 +128,10 @@ import SideBar from './components/drawer/SideBar';
               }
           });
           this.location = location
-
-          this.marker.remove()
-          console.log(data)
+          
+          if(this.marker != undefined) {
+            this.marker.remove()
+          }
 
           this.marker = L.marker([ data.geometry.coordinates[1], data.geometry.coordinates[0], {icon: greenIcon} ]).addTo(this.mymap);
         },
@@ -141,8 +145,9 @@ import SideBar from './components/drawer/SideBar';
           });
           this.location = location
 
-          this.endMarker.remove()
-          console.log(data)
+          if(this.endMarker != undefined) {
+            this.endMarker.remove()
+          }
 
           this.endMarker = L.marker([ data.geometry.coordinates[1], data.geometry.coordinates[0], {icon: greenIcon} ]).addTo(this.mymap);
         },

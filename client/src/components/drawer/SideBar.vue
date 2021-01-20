@@ -42,8 +42,9 @@
                 <p>Me localiser</p>
               </v-btn>
             </div>
+
             <div class="input-start">
-              <v-autocomplete id="input1" v-model="input1" :search-input.sync="searchStartAdress" item-value="id" :items="adresses" persistent-hint prepend-icon="mdi-city" placeholder="Mon point de depart">
+              <v-autocomplete id="input1" v-model="input1" :search-input.sync="searchStartAdress" item-value="id" :items="startAdresses" persistent-hint prepend-icon="mdi-city" placeholder="Mon point de depart">
 
                 <template v-slot:append-outer>
                   <v-slide-x-reverse-transition
@@ -59,8 +60,9 @@
                 </template>
               </v-autocomplete>
             </div>
+
             <div class="input-end">
-              <v-autocomplete id="input2" v-model="input2" :search-input.sync="searchEndAdress" item-value="id" :items="adresses" persistent-hint prepend-icon="mdi-city" placeholder="Mon point d'arrivé ">
+              <v-autocomplete id="input2" v-model="input2" :search-input.sync="searchEndAdress" item-value="id" :items="endAdresses" persistent-hint prepend-icon="mdi-city" placeholder="Mon point d'arrivé ">
 
                 <template v-slot:append-outer>
                   <v-slide-x-reverse-transition
@@ -106,8 +108,11 @@ import axios from 'axios';
         location: {},
         gettingLocation: false,
         errorStr: null,
-        adresses: [],
+        startAdresses: [],
+        endAdresses: [],
         selectedAdress: [],
+        selectedStartAdress: [],
+        selectedEndAdress: [],
         data: [],
 
       }
@@ -128,46 +133,75 @@ import axios from 'axios';
       },
 
       addStartingAdress() {
-        this.$emit('addStartingAdress', this.selectedAdress)
+        this.$emit('addStartingAdress', this.selectedStartAdress)
       },
 
       addEndAdress() {
-        this.$emit('addEndAdress', this.selectedAdress)
+        this.$emit('addEndAdress', this.selectedEndAdress)
       },
 
-      async search(val) {
+      async search(val, input) {
         this.selectedAdress = [];
         this.data = [];
-        this.adresses = [];
+        if(input == 'start') {
+            this.startAdresses = [];
+        } else if (input == 'end') {
+            this.endAdresses = [];
+        }
         // var data = [];
         var saintDenisCP = ['97400', '97417', '97490'];
 
-        // get adresses : api gouv géo
-        await axios.get('https://api-adresse.data.gouv.fr/search/?q=' + val + '&type=&autocomplete=1').then((response) => {
-          response.data.features.forEach(element => {
-            if(saintDenisCP.includes(element.properties.postcode)) {
-              this.selectedAdress = element;
-              this.data.push(element)
+        var splitVal = val === null ? [] : val.split(' ');
+        var searchVal = [];
+        var stringSearch = '';
+        for(var i = 0; i < splitVal.length; i++){
+            searchVal.push((i == 0 ? splitVal[i] : (splitVal[i] === ' ' ? '' : '+') + splitVal[i]));
+        }
+
+        for(var j = 0; j < searchVal.length; j++){
+            stringSearch = stringSearch + searchVal[j];
+        }
+
+        if(stringSearch != '') {
+          // get adresses : api gouv géo
+          await axios.get('https://api-adresse.data.gouv.fr/search/?q=' + stringSearch + '&type=&citycode=97411&autocomplete=1').then((response) => {
+            response.data.features.forEach(element => {
+              if(saintDenisCP.includes(element.properties.postcode)) {
+                if(input == 'start') {
+                    this.selectedStartAdress = element;
+                } else if (input == 'end') {
+                    this.selectedEndAdress = element;
+                }
+                this.data.push(element)
+              }
+            });
+          })
+          .catch( (error) => {
+            console.log(error)
+          })
+        
+
+          // Autocomplete data
+          this.data.forEach(item => {
+            // console.log(item.properties.label)
+            if(input == 'start') {
+                this.startAdresses.push(item.properties.label)
+            } else if (input == 'end') {
+                this.endAdresses.push(item.properties.label)
             }
-          });
-        })
-        .catch( (error) => {
-          console.log(error)
-        })
-        // Autocomplete data
-        this.data.forEach(item => {
-          // console.log(item.properties.label)
-          this.adresses.push(item.properties.label)
-        })
+            
+          })
+        } 
+
       }
     },
 
     watch: {
       searchStartAdress(val) {
-        this.search(val)
+        this.search(val, 'start')
       },
       searchEndAdress(val) {
-        this.search(val)
+        this.search(val, 'end')
       },
       
     },
